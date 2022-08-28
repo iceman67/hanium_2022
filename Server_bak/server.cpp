@@ -1,8 +1,5 @@
 
-#include <iostream>
-#include <fstream>
 #include <stdio.h>
-#include <string>
 #include <stdlib.h>
 #include <unistd.h>
 #include <resolv.h>
@@ -10,13 +7,9 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <sys/timeb.h>
-#include <sstream>
-#include <mysql.h>
 
 #include "server.h"
 #include "command_parser.h"
-#include "command_define_list.h"
 #include "tracex.h"
 
 #include <iostream>
@@ -29,65 +22,9 @@
 using namespace std;
 
 NETWORK_CONTEXT *g_pNetwork;
-HEADERPACKET sendDataPacket;
-
-MYSQL *conn;
-MYSQL_RES *res;
-
-
-MYSQL* mysql_connection_setup(struct db_user sql_user);
-MYSQL_RES* mysql_perform_query(MYSQL *connection, char *sql_query);
-void create_table(string table_name);
-void insert_database(char* CID, char* Hash);
 void closesocket(SOCKET sock_fd);
 
-string getCID() {
-    struct timeb tb;   // <sys/timeb.h>                       
-    struct tm tstruct;                      
-    std::ostringstream oss;   
-    
-    string s_CID;                             
-    char buf[128];                                            
-                                                              
-    ftime(&tb);
-    // For Thread safe, use localtime_r
-    if (nullptr != localtime_r(&tb.time, &tstruct)) {         
-        strftime(buf, sizeof(buf), "%Y-%m-%d_%T.", &tstruct);  
-        oss << buf; // YEAR-MM-DD HH-mm_SS            
-        oss << tb.millitm; // millisecond               
-    }              
-
-    s_CID = oss.str();
-    
-    s_CID = s_CID.substr(0,23);
-    if(s_CID.length() == 22) {
-        s_CID = s_CID.append("0");
-    }
-    if(s_CID.length() == 21) {
-        s_CID = s_CID.append("00");
-    }
-    
-    return s_CID;
-}
-
-void makePacket(uint8_t cmd, uint8_t dataType, uint32_t dataSize)
-{
-	sendDataPacket.startID = Server; //로거, 검증기, 서버 ...
-	sendDataPacket.destID = Logger;
-	sendDataPacket.command = cmd;
-	sendDataPacket.dataType = dataType;
-	sendDataPacket.dataSize = dataSize;
-}
-
-void initDatabase(struct db_user *db_info){
-	db_info->server = DB_IP;
-	db_info->user = "hanium";
-	db_info->password = "1234";
-	db_info->database = "hanium";
-	db_info->table = "1990-01-01";
-}
-
-static int __send( IO_PORT *p, HANDLE *pdata, int len )
+static int __send( IO_PORT *p, char *pdata, int len )
 {
 	int res = 0;
 	int i = 0;
@@ -150,7 +87,7 @@ static int __recv( IO_PORT *p, HANDLE pdata, int len )
 	return recv( p->s, pdata, len, 0 );
 }
 
-int send_binary( IO_PORT *p, long nSize, HANDLE *pdata )
+int send_binary( IO_PORT *p, long nSize, char *pdata )
 {
 	int nSendBytes;
 
@@ -176,39 +113,14 @@ int send_binary( IO_PORT *p, long nSize, HANDLE *pdata )
 	return TRUE;
 }
 
-int send_packet( IO_PORT *p, long nSize, HEADERPACKET *pdata )
-{
-	int nSendBytes;
-
-	if( p == NULL ) {
-		TRACE_ERR("p == NULL\n");
-		return FALSE;
-	}
-
-	//TRACEF("nSize = %d\n", nSize);
-	do {
-		nSendBytes = MIN( ASYNC_BUFSIZE, nSize );
-		nSendBytes = __send( p, (void**)pdata, nSendBytes );
-		if( nSendBytes <= 0 ) {
-			TRACE_ERR( "return FALSE(%d)\n", nSendBytes );
-			return FALSE;
-		}
-
-		pdata += nSendBytes;
-		nSize -= nSendBytes;
-
-	} while( nSize > 0 );
-
-	return TRUE;
-}
-
 int recv_binary( IO_PORT *p, long size, unsigned char *pdata )
 {
 	int remainbytes, recvbytes;
 
 	remainbytes = size;
 	while(remainbytes > 0) {
-		recvbytes = __recv( p, (void*)pdata, remainbytes );
+		recvbytes = __recv( p, pdata, remainbytes );
+		cout << "recv bytes : " << recvbytes << endl;
 		if( recvbytes <= 0 ) {
 			TRACE_ERR( "ERR recv_binary :%d\n", recvbytes );
 			return FALSE;
@@ -279,7 +191,6 @@ int bind_socket( SOCKET s, int port )
 static void *ClientServiceThread(void *arg)
 {
 	cout << "ClientServiceThread start" << endl;
-	cout << "-------------------------------------------" << endl << endl;
 	IO_PORT *clientThd = (IO_PORT*) arg;
 	uint8_t res;
 	uint32_t fd_max;
@@ -308,14 +219,13 @@ static void *ClientServiceThread(void *arg)
 	fd_max = fd_socket+1;
 
 	while( clientThd->timeout > 0 ) {
-		memset(buf, 0, sizeof(buf));
 		FD_ZERO( &reads );
 		FD_SET( fd_socket, &reads );
 		tv.tv_sec = 10;
 		tv.tv_usec = 0;
 
 		//make HEADERPACKET
-		cout << "end time : " << getCID() << endl;
+
 		res = select( fd_max, &reads, NULL, NULL, &tv );
 		if( res == -1 ) {
 			TRACE_ERR( "connect socket(%d) Select error.\n", fd_socket);
@@ -346,17 +256,16 @@ static void *ClientServiceThread(void *arg)
 		}
 		else{
 			cout << "cmd_parsing" << endl;
-			cout << "-------------------------------------------" << endl << endl;
 			send_retry_cnt--;
 			if(send_retry_cnt == 0) {
 				TRACE_ERR("connect socket(%d) Command send error\n", fd_socket);
 				goto SERVICE_DONE;
 			}
-			// if (buf[2] == CMD_BACKGROUND) {
-			// 	send_retry_cnt = 5;
-			// 	usleep(10000);
-			// 	continue;
-			// }
+			if (buf[2] == CMD_BACKGROUND) {
+				send_retry_cnt = 5;
+				usleep(10000);
+				continue;
+			}
 		}
 		send_retry_cnt = 5;
 
@@ -373,6 +282,7 @@ static void *listenThd(void *arg)
 	cout << "listen start" << endl;
 
 	NETWORK_CONTEXT *thisThd = (NETWORK_CONTEXT *) arg;
+	cout << "this_Thd num : " << thisThd << endl;
 	SOCKET      news;
 	socklen_t   len;
 	int         fd_max, opt;
@@ -459,18 +369,12 @@ int initServer()
 
 	pthread_mutex_init(&g_pNetwork->g_mc_mtx, NULL);
 
-	if( bind_socket( 
-		g_pNetwork->m_socket, SERVER_PROTOCOL_PORT ) == FALSE ) {
+	if( bind_socket( g_pNetwork->m_socket, SERVER_PROTOCOL_PORT ) == FALSE ) {
 		TRACEF("ERROR cannot bind listen port:%d \n", SERVER_PROTOCOL_PORT );
 		closesocket( g_pNetwork->m_socket);
 		g_pNetwork->m_socket = INVALID_SOCKET;
 		return -2;
 	}
-
-	//SQL Database connect
-	initDatabase(&g_pNetwork->mysqlID);
-
-	conn = mysql_connection_setup(g_pNetwork->mysqlID);
 
 	res = pthread_create(&g_pNetwork->listenThread, NULL, listenThd, (void*)g_pNetwork);
 
@@ -503,9 +407,6 @@ void termServer()
 		sleep(3);
 	}
 
-	mysql_free_result(res);
-	mysql_close(conn);
-
 	if(g_pNetwork){
 		free(g_pNetwork);
 	}
@@ -515,78 +416,36 @@ void closesocket(SOCKET sock_fd){
 	close(sock_fd);
 }
 
-int video_data_send(HEADERPACKET* msg){
-	unsigned char *recv_buf = new unsigned char[msg->dataSize];
-	char* CID = new char[CID_size];
-	char* Hash = new char[Hash_size];
+void print_buf(unsigned char* buf, int size){
+	for(int i = 0; i< size; i++){
+		cout << buf[i];
+	}
+	cout << endl;
+}
 
-	memset(recv_buf, 0, msg->dataSize);
+int video_data_send(HEADERPACKET* msg){
+	cout << "video data send func start" << endl;
+	cout << "data size : " << (int)msg->dataSize << endl;
+	char *CID_buf = new char[CID_size];
+	unsigned char *buf = new unsigned char[msg->dataSize-CID_size];
 	int frame_size =  msg->dataSize - CID_size - Hash_size;
 	FILE *file;
 
-	recv_binary(&g_pNetwork->port, 23, recv_buf);
-	strcpy(CID, (char*)recv_buf);
+	recv_binary(&g_pNetwork->port, 23, (unsigned char*)CID_buf);
+	cout << "CID : ";
+	//print_buf(buf, msg->dataSize);
+	file = fopen(CID_buf, "wb");
+	memset(buf, 0, sizeof(buf));
 
-	const char* file_name = (const char*)recv_buf;
-	if(strlen(file_name) > 23){
-		cout << "file name is too long" << endl;
-		return -1;
-	}
-	file = fopen(file_name, "wb");
-	memset(recv_buf, 0, msg->dataSize);
+	recv_binary(&g_pNetwork->port, 64, buf);
+	cout << "hash : ";
+	print_buf(buf, msg->dataSize);
+	memset(buf, 0, sizeof(buf));
 
-	recv_binary(&g_pNetwork->port, 64, recv_buf);
-	strcpy(Hash, (char*)recv_buf);
-	memset(recv_buf, 0, msg->dataSize);
-
-	recv_binary(&g_pNetwork->port, frame_size, recv_buf);
-	fwrite(recv_buf, sizeof(char), frame_size, file);
-
-
-	fflush(file);
-	fclose(file);
-	delete [] recv_buf;
-
-	makePacket(VIDEO_DATA_RES, 0, 0);
-	send_packet(&g_pNetwork->port, sizeof(HEADERPACKET), &sendDataPacket);
-	
-	insert_database(CID, Hash);
+	recv_binary(&g_pNetwork->port, frame_size, buf);
+	fwrite(buf, sizeof(char), frame_size, file);
+	//print_buf(buf);
+	memset(buf, 0, sizeof(buf));
 
 	return 1;
-}
-
-MYSQL* mysql_connection_setup(struct db_user sql_user){
-  MYSQL *connection = mysql_init(NULL);
-
-  if(!mysql_real_connect(connection, sql_user.server, sql_user.user, sql_user.password, sql_user.database, 0, NULL, 0)) {
-    printf("Connection error : %s\n", mysql_error(connection));
-    exit(1);
-  }
-
-  return connection;
-}
-
-MYSQL_RES* mysql_perform_query(MYSQL *connection, char *sql_query) {
-  while(mysql_query(connection, sql_query)){
-    // printf("MYSQL query error : %s\n", mysql_error(connection));
-    // exit(1);
-	create_table(g_pNetwork->mysqlID.table);
-  }
-
-  return mysql_use_result(connection);
-}
-
-void insert_database(char* CID, char* Hash){
-	string sorder = "INSERT INTO " + g_pNetwork->mysqlID.table + "('" + CID + "', '" + Hash + "', 0)";	
-	char *order = new char[sorder.length() + 1];
-	strcpy(order, sorder.c_str());
-	res = mysql_perform_query(conn, order);
-}
-
-void create_table(string table_name){
-	string sorder = "CREATE TABLE " + table_name + "(CID VALCHAR(24), Hash VALCHAR(70), Verified INTEGER, CONSTAINT PRIMARY KEY(CID) );";
-	char *order = new char[sorder.length() + 1];
-	strcpy(order, sorder.c_str());
-	mysql_query(conn, order);
-	res = mysql_use_result(conn);
 }

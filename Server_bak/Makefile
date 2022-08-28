@@ -20,20 +20,20 @@ LIVDIRS			+=
 
 OBJS			= $(SRCS:.cpp=.o)
 
-CFLAGS			= $(INCLUDEDIRS) -g -o -W -Wall -I/usr/include/mysql -L/usr/lib64/mysql -lmysqlclient
+CFLAGS			= $(INCLUDEDIRS) -o -W -Wall -O2
 LDFLAGS			= $(LIVDIRS)
-LIBS			= -lpthread -lmysqlclient
+LIBS			= -lpthread
 
 #---------------------------------------------------------------------
 CC			= $(CROSS_PREFIX)-gcc
 CXX			= $(CROSS_PREFIX)-g++
 AR			= $(CROSS_PREFIX)-ar rc
 AR2			= $(CROSS_PREFIX)-ranlib
-RANLIB		= $(CROSS_PREFIX)-ranlib
+RANLIB			= $(CROSS_PREFIX)-ranlib
 LD			= $(CROSS_PREFIX)-ld
 NM			= $(CROSS_PREFIX)-nm
-STRIP		= $(CROSS_PREFIX)-strip
-OBJCOPY		= $(CROSS_PREFIX)-objcopy
+STRIP			= $(CROSS_PREFIX)-strip
+OBJCOPY		 	= $(CROSS_PREFIX)-objcopy
 CP	= cp
 MV	= mv
 #--------------------------------------------------------------------
@@ -42,16 +42,16 @@ all : $(TARGET)
 
 
 $(TARGET) : $(OBJS)
-	$(CXX) $(LDFLAGS) $(OBJS) -o $@ $(LIBS)
+	$(CXX) $(LDFLAGS) $(OBJS) -o $@ $(LIBS) -g
 	$(NM) $(TARGET) > $(TARGET).map
 
 %.o:%.c
 	@echo "Compiling $< ..."
 	$(CC) -c $(CFLAGS) -o $@ $<
 
-%.o:%.cpp
+%.o:%.cc
 	@echo "C++ compiling $< ..."
-	$(CXX) -c $(CFLAGS) -o $@ $<
+	$(CXX) -c $(CFLAGS) $(CXXFLAGS) -o $@ $<
 
 dep :
 	$(CXX)	-M	$(INCLUDEDIRS)	$(SRCS) > .depend
@@ -66,7 +66,11 @@ clean:
 	rm -f $(TARGET) core
 
 distclean: clean
-	rm -rf .depend
+	rm -rf .depend	
+
+gdb : main_func.cpp
+	g++ main_func.cpp -g -lpthread
+
 
 ifeq (.depend,$(wildcard .depend))
 include .depend

@@ -1,7 +1,5 @@
 
 #include <pthread.h>
-#include <string>
-#include <iostream>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -15,8 +13,6 @@
 
 #define SOCKET u_int32_t
 
-#define DB_IP "127.0.0.1"
-
 /*Communication protocol*/
 #define CMD_HDR_SIZE 8	
 #define SERVER_PROTOCOL_PORT 8700
@@ -25,14 +21,6 @@
 
 #ifndef __SERVERSOCKET_HEADER__
 #define __SERVERSOCKET_HEADER__
-
-struct db_user {
-	char *server;
-	char *user;
-	char *password;
-	char *database;
-	std::string table;
-};
 
 typedef struct
 {
@@ -77,12 +65,9 @@ typedef struct
 	u_int32_t recvLoop;
 	u_int32_t m_socket;
 
-	struct db_user mysqlID;
-
 	IO_PORT port;
 
 }NETWORK_CONTEXT;
-
 
 int initServer();
 void termServer();

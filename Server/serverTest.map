@@ -2,110 +2,169 @@
          U accept@GLIBC_2.4
          U __aeabi_atexit@CXXABI_ARM_1.3.3
          U __aeabi_unwind_cpp_pr1@GCC_3.5
-00012b14 r all_implied_fbits
-00012ec4 r all_implied_fbits
+000144e4 r all_implied_fbits
+0001497c r all_implied_fbits
          U bind@GLIBC_2.4
-00024174 B __bss_end__
-00024174 B _bss_end__
-000240cc B __bss_start
-000240cc B __bss_start__
-00010d94 t call_weak_fn
+00025224 B __bss_end__
+00025224 B _bss_end__
+00025168 B __bss_start
+00025168 B __bss_start__
+00011b7c t call_weak_fn
          U close@GLIBC_2.4
-00024160 b completed.0
-000240b4 D __data_start
-000240b4 W data_start
-00010db8 t deregister_tm_clones
-00010e1c t __do_global_dtors_aux
-00023efc d __do_global_dtors_aux_fini_array_entry
-000240b8 D __dso_handle
-00023f00 d _DYNAMIC
-000240cc D _edata
-00024174 B __end__
-00024174 B _end
+00025200 b completed.0
+00025210 B conn
+         U __cxa_end_cleanup@CXXABI_1.3
+00025150 D __data_start
+00025150 W data_start
+00011ba0 t deregister_tm_clones
+00011c04 t __do_global_dtors_aux
+00024ef4 d __do_global_dtors_aux_fini_array_entry
+00025154 D __dso_handle
+00024ef8 d _DYNAMIC
+00025168 D _edata
+00025224 B __end__
+00025224 B _end
          U __errno_location@GLIBC_2.4
+         U exit@GLIBC_2.4
+         U fclose@GLIBC_2.4
          U fflush@GLIBC_2.4
-00012b08 T _fini
+000144d8 T _fini
          U fopen@GLIBC_2.4
          U fprintf@GLIBC_2.4
-00010e44 t frame_dummy
-00023eec d __frame_dummy_init_array_entry
-000130a8 r __FRAME_END__
+00011c2c t frame_dummy
+00024ee4 d __frame_dummy_init_array_entry
+00014ce0 r __FRAME_END__
          U free@GLIBC_2.4
+         U ftime@GLIBC_2.4
          U fwrite@GLIBC_2.4
-00024000 d _GLOBAL_OFFSET_TABLE_
-0001280c t _GLOBAL__sub_I_g_pNetwork
-00012a88 t _GLOBAL__sub_I_main
-0001299c t _GLOBAL__sub_I_parser_desp
+00025000 d _GLOBAL_OFFSET_TABLE_
+00013f20 t _GLOBAL__sub_I_g_pNetwork
+00014458 t _GLOBAL__sub_I_main
+0001436c t _GLOBAL__sub_I_parser_desp
          w __gmon_start__
-00024164 B g_pNetwork
+00025204 B g_pNetwork
+         U __gxx_personality_v0@CXXABI_1.3
          U htonl@GLIBC_2.4
          U htons@GLIBC_2.4
-00010b4c T _init
-00023efc d __init_array_end
-00023eec d __init_array_start
-00012b10 R _IO_stdin_used
+00011760 T _init
+00024ef4 d __init_array_end
+00024ee4 d __init_array_start
+000144e0 R _IO_stdin_used
          w _ITM_deregisterTMCloneTable
          w _ITM_registerTMCloneTable
-00012b04 T __libc_csu_fini
-00012aa4 T __libc_csu_init
+000144d4 T __libc_csu_fini
+00014474 T __libc_csu_init
          U __libc_start_main@GLIBC_2.4
          U listen@GLIBC_2.4
-000129b8 T main
+         U localtime_r@GLIBC_2.4
+00014388 T main
          U malloc@GLIBC_2.4
          U memcpy@GLIBC_2.4
          U memset@GLIBC_2.4
-000240bc D parser_desp
+         U mysql_close@libmysqlclient_18
+         U mysql_error@libmysqlclient_18
+         U mysql_free_result@libmysqlclient_18
+         U mysql_init@libmysqlclient_18
+         U mysql_query@libmysqlclient_18
+         U mysql_real_connect@libmysqlclient_18
+         U mysql_use_result@libmysqlclient_18
+00025158 D parser_desp
+         U printf@GLIBC_2.4
          U pthread_create@GLIBC_2.4
          U pthread_detach@GLIBC_2.4
          U pthread_join@GLIBC_2.4
          U pthread_mutex_init@GLIBC_2.4
          U pthread_self@GLIBC_2.4
          U recv@GLIBC_2.4
-00010de4 t register_tm_clones
+00011bcc t register_tm_clones
+00025214 B res
          U select@GLIBC_2.4
+00025208 B sendDataPacket
          U send@GLIBC_2.4
          U setsockopt@GLIBC_2.4
          U sleep@GLIBC_2.4
          U socket@GLIBC_2.4
-00010d58 T _start
-0002415c B stdout@GLIBC_2.4
+00011b40 T _start
+000251fc B stdout@GLIBC_2.4
+         U strcpy@GLIBC_2.4
          U strerror@GLIBC_2.4
-000240cc D __TMC_END__
+         U strftime@GLIBC_2.4
+         U strlen@GLIBC_2.4
+00025168 D __TMC_END__
          U usleep@GLIBC_2.4
-00012828 T _Z10cmd_parser7IO_PORTP12HEADERPACKET
-00012150 T _Z10initServerv
-000123e8 T _Z10termServerv
-000115e0 T _Z11bind_socketji
-00012564 T _Z11closesocketj
-00011348 T _Z11recv_binaryP7IO_PORTlPh
-000111a0 T _Z11send_binaryP7IO_PORTlPc
-00011494 T _Z13create_socketv
-00012604 T _Z15video_data_sendP12HEADERPACKET
-000127a8 t _Z41__static_initialization_and_destruction_0ii
-00012938 t _Z41__static_initialization_and_destruction_0ii
-00012a24 t _Z41__static_initialization_and_destruction_0ii
-000128f0 T _Z4testP12HEADERPACKET
-0001258c T _Z9print_bufPhi
-0001176c t _ZL19ClientServiceThreadPv
-00010fd4 t _ZL6__recvP7IO_PORTPvi
-00010e48 t _ZL6__sendP7IO_PORTPci
-00011c3c t _ZL9listenThdPv
-00012ea4 r _ZN9__gnu_cxxL21__default_lock_policyE
+000141b8 T _Z10cmd_parser7IO_PORTP12HEADERPACKET
+000133d8 T _Z10initServerv
+00011df0 T _Z10makePackethhj
+000136dc T _Z10termServerv
+000127e0 T _Z11bind_socketji
+00013880 T _Z11closesocketj
+00012580 T _Z11recv_binaryP7IO_PORTlPh
+00012228 T _Z11send_binaryP7IO_PORTlPPv
+000123d4 T _Z11send_packetP7IO_PORTlP12HEADERPACKET
+00013dc0 T _Z12create_tableNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE
+00011e60 T _Z12initDatabaseP7db_user
+00012694 T _Z13create_socketv
+00013bfc T _Z15insert_databasePcS_
+000138a8 T _Z15video_data_sendP12HEADERPACKET
+00013b58 T _Z19mysql_perform_queryP8st_mysqlPc
+00013aa0 T _Z22mysql_connection_setup7db_user
+00013ebc t _Z41__static_initialization_and_destruction_0ii
+00014308 t _Z41__static_initialization_and_destruction_0ii
+000143f4 t _Z41__static_initialization_and_destruction_0ii
+000142c0 T _Z4testP12HEADERPACKET
+00011c30 T _Z6getCIDB5cxx11v
+         U _ZdaPv@GLIBCXX_3.4
+0001296c t _ZL19ClientServiceThreadPv
+0001205c t _ZL6__recvP7IO_PORTPvi
+00011ed0 t _ZL6__sendP7IO_PORTPPvi
+00012eec t _ZL9listenThdPv
+00013f64 W _ZN7db_userC1ERKS_
+00013f64 W _ZN7db_userC2ERKS_
+00013fe4 W _ZN7db_userD1Ev
+00013fe4 W _ZN7db_userD2Ev
+0001415c W _ZN9__gnu_cxx14__alloc_traitsISaIcEcE17_S_select_on_copyERKS1_
+0001495c r _ZN9__gnu_cxxL21__default_lock_policyE
          U _Znaj@GLIBCXX_3.4
-         U _ZNSolsEi@GLIBCXX_3.4
+         U _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13get_allocatorEv@GLIBCXX_3.4.21
+         U _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE4sizeEv@GLIBCXX_3.4.21
+         U _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv@GLIBCXX_3.4.21
+         U _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE6lengthEv@GLIBCXX_3.4.21
+         U _ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE6substrEjj@GLIBCXX_3.4.21
+         U _ZNKSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEE3strEv@GLIBCXX_3.4.21
+         U _ZNSaIcEC1ERKS_@GLIBCXX_3.4
+         U _ZNSaIcED1Ev@GLIBCXX_3.4
          U _ZNSolsEPFRSoS_E@GLIBCXX_3.4
-         U _ZNSolsEPKv@GLIBCXX_3.4
+         U _ZNSolsEt@GLIBCXX_3.4
+00013f3c W _ZNSt11char_traitsIcE6lengthEPKc
+0001418c W _ZNSt16allocator_traitsISaIcEE37select_on_container_copy_constructionERKS0_
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE6appendEPKc@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE6appendEPKcj@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE6appendERKS4_@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE7reserveEj@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEOS4_@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSEPKc@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEaSERKS4_@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1EOS4_@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1ERKS3_@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1ERKS4_@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1Ev@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev@GLIBCXX_3.4.21
+         U _ZNSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEEC1Ev@GLIBCXX_3.4.26
+         U _ZNSt7__cxx1119basic_ostringstreamIcSt11char_traitsIcESaIcEED1Ev@GLIBCXX_3.4.21
          U _ZNSt8ios_base4InitC1Ev@GLIBCXX_3.4
          U _ZNSt8ios_base4InitD1Ev@GLIBCXX_3.4
-000240d0 B _ZSt4cout@GLIBCXX_3.4
+00025170 B _ZSt4cout@GLIBCXX_3.4
          U _ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@GLIBCXX_3.4
-00012ea8 r _ZStL13allocator_arg
-00012ba4 r _ZStL19piecewise_construct
-00012e8c r _ZStL19piecewise_construct
-00012ea0 r _ZStL19piecewise_construct
-00012eac r _ZStL6ignore
-00024168 b _ZStL8__ioinit
-0002416c b _ZStL8__ioinit
-00024170 b _ZStL8__ioinit
-         U _ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_h@GLIBCXX_3.4
+00014138 W _ZSt4moveIRNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEONSt16remove_referenceIT_E4typeEOS8_
+00014960 r _ZStL13allocator_arg
+00014574 r _ZStL19piecewise_construct
+0001492c r _ZStL19piecewise_construct
+00014958 r _ZStL19piecewise_construct
+00014964 r _ZStL6ignore
+00025218 b _ZStL8__ioinit
+0002521c b _ZStL8__ioinit
+00025220 b _ZStL8__ioinit
+         U _ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE@GLIBCXX_3.4.21
          U _ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@GLIBCXX_3.4
+000140ec W _ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEOS8_PKS5_
+00014014 W _ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_
